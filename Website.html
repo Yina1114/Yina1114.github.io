@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yiwen (Yina) Zhang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#4A7BA3;
+  --bg2:#3D6E96;
+  --bg3:#356089;
+  --surface:#5585AE;
+  --border:rgba(243,216,227,.18);
+  --border2:rgba(243,216,227,.32);
+  --gold:#F3D8E3;
+  --gold2:#fff0f5;
+  --teal:#fce4ed;
+  --text:#F8EEF3;
+  --text2:rgba(248,238,243,.7);
+  --text3:rgba(248,238,243,.4);
+  --ff-display:'Cormorant Garamond',serif;
+  --ff-sans:'Syne',sans-serif;
+  --ff-mono:'DM Mono',monospace;
+}
+
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--ff-sans);overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+.cursor{position:fixed;width:8px;height:8px;background:#F3D8E3;border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;mix-blend-mode:screen}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid #F3D8E3;border-radius:50%;pointer-events:none;z-index:9998;transition:all .1s ease;opacity:.5}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:24px 48px;background:linear-gradient(to bottom,rgba(74,123,163,.97),transparent)}
+.nav-logo{font-family:var(--ff-display);font-size:18px;font-weight:300;letter-spacing:.08em;color:var(--gold)}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text2);text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:var(--gold)}
+.lang-toggle{font-family:var(--ff-mono);font-size:11px;padding:6px 14px;border:1px solid var(--border2);border-radius:2px;background:transparent;color:var(--text2);cursor:none;transition:all .3s;letter-spacing:.1em}
+.lang-toggle:hover{border-color:var(--gold);color:var(--gold)}
+
+/* HERO */
+#hero{height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 48px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 70% 40%, rgba(243,216,227,.12) 0%, transparent 60%), radial-gradient(ellipse at 20% 80%, rgba(255,240,245,.07) 0%, transparent 50%);z-index:0}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(243,216,227,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(243,216,227,.08) 1px,transparent 1px);background-size:60px 60px;z-index:0}
+.hero-content{position:relative;z-index:1;max-width:900px}
+.hero-eyebrow{font-family:var(--ff-mono);font-size:11px;color:var(--gold);letter-spacing:.25em;text-transform:uppercase;margin-bottom:24px;opacity:0;animation:fadeUp .8s .3s forwards}
+.hero-name{font-family:var(--ff-display);font-size:clamp(52px,8vw,110px);font-weight:300;line-height:1;letter-spacing:-.01em;margin-bottom:12px;opacity:0;animation:fadeUp .8s .5s forwards}
+.hero-name em{font-style:italic;color:var(--gold);font-weight:300}
+.hero-sub{font-size:14px;line-height:1.8;color:var(--text2);max-width:520px;margin-bottom:40px;opacity:0;animation:fadeUp .8s .7s forwards;font-weight:400}
+.hero-sub strong{color:var(--gold2);font-weight:500}
+.hero-cta{display:flex;gap:16px;opacity:0;animation:fadeUp .8s .9s forwards}
+.btn-primary{font-size:11px;letter-spacing:.2em;text-transform:uppercase;padding:14px 28px;background:var(--gold);color:#4A7BA3;text-decoration:none;transition:all .3s;font-family:var(--ff-sans);font-weight:700}
+.btn-primary:hover{background:var(--gold2)}
+.btn-ghost{font-size:11px;letter-spacing:.2em;text-transform:uppercase;padding:14px 28px;border:1px solid var(--border2);color:var(--text2);text-decoration:none;transition:all .3s}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.hero-scroll{position:absolute;bottom:40px;right:48px;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeIn 1s 1.2s forwards}
+.hero-scroll span{font-family:var(--ff-mono);font-size:10px;color:var(--text3);letter-spacing:.2em;writing-mode:vertical-rl}
+.scroll-line{width:1px;height:60px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s infinite}
+.hero-stats{position:absolute;right:48px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:24px;opacity:0;animation:fadeIn 1s 1.1s forwards}
+.stat{text-align:right}
+.stat-num{font-family:var(--ff-display);font-size:36px;font-weight:600;color:var(--gold);line-height:1}
+.stat-label{font-family:var(--ff-mono);font-size:9px;color:var(--text3);letter-spacing:.15em;text-transform:uppercase;margin-top:4px}
+
+/* SECTIONS */
+section{padding:100px 48px;border-top:1px solid var(--border)}
+.section-header{display:flex;align-items:baseline;gap:16px;margin-bottom:60px}
+.section-num{font-family:var(--ff-mono);font-size:11px;color:var(--gold);letter-spacing:.2em}
+.section-title{font-family:var(--ff-display);font-size:clamp(32px,4vw,52px);font-weight:300;font-style:italic}
+.section-line{flex:1;height:1px;background:var(--border);margin-left:24px}
+
+/* ABOUT */
+#about .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+.about-text p{font-size:15px;line-height:1.9;color:var(--text2);margin-bottom:20px}
+.about-text p strong{color:var(--gold2);font-weight:500}
+.about-text p em{color:var(--teal);font-style:normal}
+.skills-block{margin-top:40px}
+.skills-label{font-family:var(--ff-mono);font-size:10px;color:var(--text3);letter-spacing:.2em;text-transform:uppercase;margin-bottom:16px}
+.skills-list{display:flex;flex-wrap:wrap;gap:8px}
+.skill-tag{font-family:var(--ff-mono);font-size:11px;padding:5px 12px;border:1px solid var(--border2);color:var(--text2);letter-spacing:.05em;transition:all .3s}
+.skill-tag:hover{border-color:var(--gold);color:var(--gold)}
+.about-right{display:flex;flex-direction:column;gap:24px}
+.fun-facts-title{font-family:var(--ff-mono);font-size:10px;color:var(--text3);letter-spacing:.2em;text-transform:uppercase;margin-bottom:20px}
+.fun-fact{display:flex;gap:16px;padding:20px;border:1px solid var(--border);background:rgba(255,255,255,.07);transition:border-color .3s;position:relative;overflow:hidden}
+.fun-fact::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);opacity:0;transition:opacity .3s}
+.fun-fact:hover{border-color:var(--border2)}
+.fun-fact:hover::before{opacity:1}
+.fun-fact-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.fun-fact-text{font-size:13px;line-height:1.7;color:var(--text2)}
+.fun-fact-text strong{color:var(--text);font-weight:500;display:block;margin-bottom:4px}
+
+/* EXPERIENCE */
+#experience .exp-timeline{display:flex;flex-direction:column;gap:0}
+.exp-item{display:grid;grid-template-columns:200px 1fr;gap:40px;padding:36px 0;border-bottom:1px solid var(--border);position:relative}
+.exp-item::before{content:'';position:absolute;left:185px;top:46px;width:8px;height:8px;border-radius:50%;background:var(--border2);border:2px solid var(--bg);z-index:1;transition:background .3s}
+.exp-item:hover::before{background:var(--gold)}
+.exp-time{font-family:var(--ff-mono);font-size:11px;color:var(--text3);letter-spacing:.08em;padding-top:4px;line-height:1.7}
+.exp-time .exp-period{color:var(--gold);font-size:10px;letter-spacing:.12em;display:block;margin-bottom:6px}
+.exp-body{}
+.exp-role{font-family:var(--ff-sans);font-size:15px;font-weight:700;letter-spacing:.05em;margin-bottom:4px;color:var(--text)}
+.exp-company{font-family:var(--ff-display);font-size:20px;font-style:italic;color:var(--gold);margin-bottom:16px;font-weight:300}
+.exp-bullets{list-style:none;display:flex;flex-direction:column;gap:8px}
+.exp-bullets li{font-size:13px;line-height:1.8;color:var(--text2);padding-left:16px;position:relative}
+.exp-bullets li::before{content:'—';position:absolute;left:0;color:var(--text3);font-size:11px}
+.exp-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.exp-tag{font-family:var(--ff-mono);font-size:10px;padding:3px 10px;background:rgba(243,216,227,.15);border:1px solid rgba(243,216,227,.35);color:var(--gold);letter-spacing:.06em}
+
+/* PROJECTS */
+#projects .proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.proj-card{background:rgba(255,255,255,.06);padding:36px;transition:background .3s;position:relative;overflow:hidden}
+.proj-card::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top left,rgba(243,216,227,.1),transparent 60%);opacity:0;transition:opacity .4s}
+.proj-card:hover{background:rgba(255,255,255,.12)}
+.proj-card:hover::after{opacity:1}
+.proj-num{font-family:var(--ff-mono);font-size:10px;color:var(--text3);letter-spacing:.2em;margin-bottom:20px}
+.proj-name{font-family:var(--ff-display);font-size:22px;font-weight:400;font-style:italic;margin-bottom:8px;color:var(--text);line-height:1.3}
+.proj-org{font-family:var(--ff-mono);font-size:10px;color:var(--teal);letter-spacing:.12em;margin-bottom:16px}
+.proj-desc{font-size:13px;line-height:1.8;color:var(--text2);margin-bottom:20px}
+.proj-highlights{display:flex;flex-direction:column;gap:6px;margin-bottom:20px}
+.proj-highlight{font-family:var(--ff-mono);font-size:11px;color:var(--gold);padding:4px 10px;background:rgba(243,216,227,.1);border-left:2px solid var(--gold)}
+.proj-tech{display:flex;flex-wrap:wrap;gap:6px}
+.proj-tech span{font-family:var(--ff-mono);font-size:9px;padding:3px 8px;border:1px solid var(--border2);color:var(--text3);letter-spacing:.06em}
+
+/* INTERESTS */
+#interests .interests-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-bottom:60px}
+.interest-card{background:rgba(255,255,255,.06);padding:32px 24px;text-align:center;transition:background .3s}
+.interest-card:hover{background:rgba(255,255,255,.12)}
+.interest-icon{font-size:32px;margin-bottom:16px}
+.interest-name{font-family:var(--ff-sans);font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text);margin-bottom:6px}
+.interest-desc{font-family:var(--ff-mono);font-size:10px;color:var(--text3);letter-spacing:.05em}
+
+/* CONTACT */
+#contact .contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.contact-text{font-family:var(--ff-display);font-size:clamp(28px,3vw,42px);font-weight:300;font-style:italic;line-height:1.4;margin-bottom:32px;color:var(--text)}
+.contact-text em{color:var(--gold)}
+.contact-links{display:flex;flex-direction:column;gap:16px}
+.contact-link{display:flex;align-items:center;gap:16px;padding:16px 20px;border:1px solid var(--border);text-decoration:none;color:var(--text2);transition:all .3s;font-size:13px}
+.contact-link:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.04)}
+.contact-link-icon{font-family:var(--ff-mono);font-size:10px;color:var(--text3);letter-spacing:.15em;width:80px;flex-shrink:0}
+.contact-form{display:flex;flex-direction:column;gap:16px}
+.form-field{display:flex;flex-direction:column;gap:8px}
+.form-label{font-family:var(--ff-mono);font-size:10px;color:var(--text3);letter-spacing:.2em;text-transform:uppercase}
+.form-input{background:rgba(255,255,255,.08);border:1px solid var(--border);color:var(--text);padding:12px 16px;font-family:var(--ff-sans);font-size:13px;outline:none;transition:border-color .3s;resize:none;cursor:none}
+.form-input:focus{border-color:var(--gold)}
+.form-input::placeholder{color:var(--text3)}
+.form-submit{align-self:flex-start;padding:14px 32px;background:var(--gold);color:#4A7BA3;font-family:var(--ff-sans);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;border:none;cursor:none;transition:background .3s;margin-top:8px}
+.form-submit:hover{background:var(--gold2)}
+
+/* FOOTER */
+footer{padding:32px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.footer-name{font-family:var(--ff-display);font-size:14px;font-style:italic;color:var(--text3)}
+.footer-copy{font-family:var(--ff-mono);font-size:10px;color:var(--text3);letter-spacing:.12em}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scrollPulse{0%,100%{opacity:.3;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.1)}}
+
+/* LANG HIDDEN */
+.zh-only,.en-only{transition:opacity .3s}
+body.lang-en .zh-only{display:none}
+body.lang-zh .en-only{display:none}
+
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body class="lang-zh">
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">YZ</div>
+  <div class="nav-links">
+    <a href="#about" class="zh-only">关于</a>
+    <a href="#about" class="en-only">About</a>
+    <a href="#experience" class="zh-only">经历</a>
+    <a href="#experience" class="en-only">Experience</a>
+    <a href="#projects" class="zh-only">项目</a>
+    <a href="#projects" class="en-only">Projects</a>
+    <a href="#interests" class="zh-only">更多</a>
+    <a href="#interests" class="en-only">More</a>
+    <a href="#contact" class="zh-only">联系</a>
+    <a href="#contact" class="en-only">Contact</a>
+    <button class="lang-toggle" onclick="toggleLang()">EN / 中</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow zh-only">金融工程 · 量化研究 · UIUC</div>
+    <div class="hero-eyebrow en-only">Financial Engineering · Quant Research · UIUC</div>
+    <div class="hero-name">Yiwen <em>(Yina)</em><br>Zhang</div>
+    <p class="hero-sub zh-only">
+      在 UIUC 读金融工程，之前在 NYU 学数学。平时研究量化策略，对"为什么好好的模型一上实盘就崩"这个问题有点执念。不搞研究的时候爬爬岩、拍拍照、在山里走走。
+    </p>
+    <p class="hero-sub en-only">
+      MS Financial Engineering at UIUC, math undergrad from NYU. I like turning messy data into things that actually work — and figuring out why some models look great on paper but fall apart in the real world. Outside of that: bouldering, tennis, photography, and hiking when I need to log off. Always happy to chat over coffee.
+    </p>
+    <div class="hero-cta">
+      <a href="#experience" class="btn-primary zh-only">查看经历</a>
+      <a href="#experience" class="btn-primary en-only">View Experience</a>
+      <a href="#contact" class="btn-ghost zh-only">联系我</a>
+      <a href="#contact" class="btn-ghost en-only">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span class="zh-only">向下滚动</span>
+    <span class="en-only">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title zh-only">关于我</h2>
+    <h2 class="section-title en-only">About Me</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid reveal">
+    <div class="about-text">
+      <p class="zh-only">我叫<strong>张一文</strong>，朋友叫我 Yina。现在在 UIUC 念金融工程硕士，本科在 NYU 学数学，顺带修了数据科学。对量化研究、时间序列、机器学习这些方向都有兴趣，大方向上就是想搞清楚市场里藏着什么规律。</p>
+      <p class="en-only">I'm <strong>Yiwen (Yina) Zhang</strong>, studying MS Financial Engineering at UIUC. I did my undergrad in Mathematics at NYU with a minor in Data Science. I'm interested in quant research, time series, and machine learning — basically using math to make sense of things, then writing code to see if I'm right.</p>
+
+      <p class="zh-only">实习做过因子研究和策略回测，从数据清洗到引擎搭建都经历过，踩了不少坑。现在在备考 CFA 和 FRM，也参与过一个期权定价方向的研究课题。</p>
+      <p class="en-only">Internships gave me a chance to work in real production environments — I've built factor models and backtest engines from scratch, and made plenty of mistakes along the way. Currently studying for CFA and FRM, and I was part of a research project on options pricing.</p>
+
+      <p class="zh-only">对模型稳健性比较执着——回测漂亮没什么用，真正上了实盘还能跑才算本事。更想搞懂策略为什么失效，而不只是记录它什么时候赚了钱。</p>
+      <p class="en-only">I'm genuinely curious about model robustness. A strategy that looks great in backtests but breaks in live markets doesn't mean much — I want to understand why things fail, not just when they work.</p>
+
+      <div class="skills-block">
+        <div class="skills-label zh-only">技术栈</div>
+        <div class="skills-label en-only">Technical Skills</div>
+        <div class="skills-list">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">SQL</span>
+          <span class="skill-tag">R</span>
+          <span class="skill-tag">C++</span>
+          <span class="skill-tag">Julia</span>
+          <span class="skill-tag">Matlab</span>
+          <span class="skill-tag">PyTorch</span>
+          <span class="skill-tag">LightGBM</span>
+          <span class="skill-tag">LSTM / GARCH</span>
+          <span class="skill-tag">Monte Carlo</span>
+          <span class="skill-tag">Stochastic Calculus</span>
+          <span class="skill-tag">Time Series</span>
+          <span class="skill-tag">Options Pricing</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="fun-facts-title zh-only">// fun facts about me</div>
+      <div class="fun-facts-title en-only">// fun facts about me</div>
+      <div class="fun-fact">
+        <div class="fun-fact-icon">🔢</div>
+        <div class="fun-fact-text">
+          <strong class="zh-only">小时候觉得做数学题比打游戏好玩</strong>
+          <strong class="en-only">Thought math competitions were more fun than video games growing up</strong>
+          <span class="zh-only">然后高中去打了数学联赛，大学选了数学系，现在在研究金融数据。一以贯之，没什么变化。</span>
+          <span class="en-only">Which led to math olympiads in high school, a math degree in college, and staring at financial data now. Might be a condition.</span>
+        </div>
+      </div>
+      <div class="fun-fact">
+        <div class="fun-fact-icon">📸</div>
+        <div class="fun-fact-text">
+          <strong class="zh-only">摄影是我唯一不看数据的爱好</strong>
+          <strong class="en-only">Photography taught me to slow down</strong>
+          <span class="zh-only">平时对着屏幕，拍照反而要停下来等光线、找角度，节奏完全不一样，挺好的。</span>
+          <span class="en-only">When you spend your days looking at millisecond-level data, waiting for the right light and composition is a nice change of pace.</span>
+        </div>
+      </div>
+      <div class="fun-fact">
+        <div class="fun-fact-icon">🧗</div>
+        <div class="fun-fact-text">
+          <strong class="zh-only">能不坐着就不坐着</strong>
+          <strong class="en-only">Bouldering, tennis, hiking — anything to get off the chair</strong>
+          <span class="zh-only">抱石、网球、徒步都玩。抱石特别上头，同一条路线失败二十次之后突然过了，那种感觉很难形容。</span>
+          <span class="en-only">Bouldering is the sport that requires the most repeated failure of anything I've tried — feels familiar somehow.</span>
+        </div>
+      </div>
+      <div class="fun-fact">
+        <div class="fun-fact-icon">🌙</div>
+        <div class="fun-fact-text">
+          <strong class="zh-only">典型夜猫子</strong>
+          <strong class="en-only">A night owl, though not by choice</strong>
+          <span class="zh-only">晚上脑子比较清醒，容易进入状态。原因可能是没人打扰，也可能纯粹是咖啡因。</span>
+          <span class="en-only">Late nights are when I actually get things done — fewer messages, fewer distractions, or maybe just caffeine. Jury's still out.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title zh-only">实习经历</h2>
+    <h2 class="section-title en-only">Experience</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="exp-timeline">
+
+    <div class="exp-item reveal">
+      <div class="exp-time">
+        <span class="exp-period">MAY 2025 — SEP 2025</span>
+        <span>Boston, MA</span>
+      </div>
+      <div class="exp-body">
+        <div class="exp-role zh-only">量化研究实习生</div>
+        <div class="exp-role en-only">Quantitative Research Intern</div>
+        <div class="exp-company">NEW EIC</div>
+        <ul class="exp-bullets">
+          <li class="zh-only">整理了 2020–2025 年的 SPY 和 VIX 日频数据，处理日期错位、缺失值和异常值等各种脏数据问题。</li>
+          <li class="en-only">Consolidated daily SPY and VIX records (2020–2025) with thorough preprocessing covering date misalignment, missing values, and outliers.</li>
+          <li class="zh-only">设计了一套波动率均值回归策略，加入动态仓位、动量过滤和日内时间窗口控制。</li>
+          <li class="en-only">Designed a volatility mean-reversion strategy with dynamic position sizing, SPY momentum filters, and time-of-day trade windows.</li>
+          <li class="zh-only">从零搭建回测引擎，把滑点、止损、佣金都建进去，可以逐笔追踪每一笔交易。</li>
+          <li class="en-only">Built a fully modular backtest engine with slippage, stop-loss, and commission modeling (0.1%) for granular trade tracking.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="exp-tag">年化收益 124.37%</span>
+          <span class="exp-tag">Sharpe 5.07</span>
+          <span class="exp-tag">最大回撤 4.44%</span>
+          <span class="exp-tag">胜率 50.11%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-time">
+        <span class="exp-period">JUN 2024 — AUG 2024</span>
+        <span class="zh-only">北京，中国</span>
+        <span class="en-only">Beijing, China</span>
+      </div>
+      <div class="exp-body">
+        <div class="exp-role zh-only">量化研究实习生</div>
+        <div class="exp-role en-only">Quantitative Research Intern</div>
+        <div class="exp-company">灵均投资 · Lingjun Investment</div>
+        <div style="font-family:var(--ff-mono);font-size:10px;color:var(--text3);margin-bottom:16px;letter-spacing:.08em">Beijing · Quant Equity</div>
+        <ul class="exp-bullets">
+          <li class="zh-only">用 ARIMA、GARCH、LSTM 预测行业收益因子，几个信号叠加后 Sharpe 0.7、IC 0.11。</li>
+          <li class="en-only">Forecasted industry return factors using ARIMA, GARCH, and LSTM; combined signal achieved Sharpe 0.7 and IC 0.11.</li>
+          <li class="zh-only">后来把 STL 分解接进 LSTM，把板块的周期性也考虑进去，Sharpe 升到 0.8、IC 升到 0.12。</li>
+          <li class="en-only">Integrated STL decomposition with LSTM to capture sector cyclicality, boosting combo Sharpe to 0.8 and IC to 0.12.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="exp-tag">Sharpe 0.8</span>
+          <span class="exp-tag">IC 0.12</span>
+          <span class="exp-tag">LSTM</span>
+          <span class="exp-tag">GARCH</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-time">
+        <span class="exp-period">MAY 2023 — JUN 2023</span>
+        <span class="zh-only">北京，中国</span>
+        <span class="en-only">Beijing, China</span>
+      </div>
+      <div class="exp-body">
+        <div class="exp-role zh-only">定量分析实习生</div>
+        <div class="exp-role en-only">Quantitative Analyst Intern</div>
+        <div class="exp-company">指南针科技 · Compass Technology</div>
+        <ul class="exp-bullets">
+          <li class="zh-only">复现了一篇关于股票市场波动率预测的论文模型，协助搭建波动率预测框架。</li>
+          <li class="en-only">Reproduced models from a research paper on stock market volatility forecasting with jump diffusion and regime switching, supporting the team's volatility modeling pipeline.</li>
+          <li class="zh-only">基于 HAR 和 MS-HAR 模型研究已实现波动率的市场特征，用滚动 OLS 分析不同市场状态下的波动规律。</li>
+          <li class="en-only">Analyzed realized volatility features using HAR and MS-HAR models; applied rolling OLS regression to study volatility dynamics across different market regimes.</li>
+          <li class="zh-only">引入 Regime Switching 和杠杆非对称特征后，预测精度提升了 5%，最终整理成一份十页报告并做了汇报展示。</li>
+          <li class="en-only">Improved forecast accuracy by 5% by incorporating regime switching and leverage asymmetry; delivered a 10-page research report with a formal presentation.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="exp-tag">HAR / MS-HAR</span>
+          <span class="exp-tag">Regime Switching</span>
+          <span class="exp-tag">Rolling OLS</span>
+          <span class="exp-tag">预测精度 +5%</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title zh-only">项目经历</h2>
+    <h2 class="section-title en-only">Projects</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="proj-grid reveal">
+
+    <div class="proj-card">
+      <div class="proj-num">01</div>
+      <div class="proj-name zh-only">神经网络 S&amp;P 500 / VIX 波动率微笑联合校准</div>
+      <div class="proj-name en-only">Neural Joint S&amp;P 500 / VIX Smile Calibration</div>
+      <div class="proj-org">Research Project · Jan–Jun 2025</div>
+      <p class="proj-desc zh-only">用随机微分方程搭了个蒙特卡洛框架，同时校准 SPX 期权、VIX 期权和 VIX 期货，让三个市场的隐含波动率曲面能对上。</p>
+      <p class="proj-desc en-only">Monte Carlo–based stochastic volatility framework jointly calibrating SPX options, VIX options, and VIX futures for improved cross-market implied vol surface consistency.</p>
+      <div class="proj-highlights">
+        <div class="proj-highlight zh-only">神经网络负责把扩散参数映射到微笑特征</div>
+        <div class="proj-highlight en-only">Neural net mapping diffusion params → smile features</div>
+        <div class="proj-highlight zh-only">用 Delta 对冲 P&amp;L 和 Vega 压力测试验证结果</div>
+        <div class="proj-highlight en-only">Delta-hedged P&amp;L + vega scenario stress-testing</div>
+      </div>
+      <div class="proj-tech"><span>Python</span><span>Monte Carlo</span><span>SDE</span><span>Neural Net</span><span>Options Pricing</span></div>
+    </div>
+
+    <div class="proj-card">
+      <div class="proj-num">02</div>
+      <div class="proj-name zh-only">多智能体 LLM 决策框架</div>
+      <div class="proj-name en-only">Multi-Agent LLM Framework for Decision Making</div>
+      <div class="proj-org">Course Project · Sep–Dec 2025</div>
+      <p class="proj-desc zh-only">在多智能体 LLM 框架里搭了一套基于 RAG 的信息检索和排序系统，处理报告和市场信号，最后生成结构化的决策输出。</p>
+      <p class="proj-desc en-only">Built a RAG-based retrieval and ranking system within a multi-agent LLM framework to process reports and market signals, enabling structured decision generation.</p>
+      <div class="proj-highlights">
+        <div class="proj-highlight zh-only">搜索—引用—论证流水线，减少幻觉</div>
+        <div class="proj-highlight en-only">Search-Quote-Argue pipeline to reduce hallucination</div>
+        <div class="proj-highlight zh-only">LLM-as-a-Judge 多阶段验证机制</div>
+        <div class="proj-highlight en-only">Multi-stage LLM-as-a-Judge validation</div>
+      </div>
+      <div class="proj-tech"><span>LLM</span><span>RAG</span><span>Vector Search</span><span>Python</span><span>Multi-Agent</span></div>
+    </div>
+
+    <div class="proj-card">
+      <div class="proj-num">03</div>
+      <div class="proj-name zh-only">Heston 框架下美式期权的机器学习定价</div>
+      <div class="proj-name en-only">ML for American Option Pricing — Heston Model</div>
+      <div class="proj-org">Course Project · Aug–Dec 2024</div>
+      <p class="proj-desc zh-only">基于 Heston 随机波动率模型，用 SPY 期权市场数据构建机器学习定价框架，比较了六种模型的表现。</p>
+      <p class="proj-desc en-only">Built an ML pricing framework for American options under the Heston stochastic volatility model using SPY market data; compared six model families including RF, XGBoost, LightGBM, and neural networks.</p>
+      <div class="proj-highlights">
+        <div class="proj-highlight zh-only">Heston 参数校准生成训练数据，保证波动率动态的真实性</div>
+        <div class="proj-highlight en-only">Heston calibration for realistic vol dynamics in training data</div>
+      </div>
+      <div class="proj-tech"><span>XGBoost</span><span>LightGBM</span><span>CatBoost</span><span>Optuna</span><span>Python</span></div>
+    </div>
+
+    <div class="proj-card">
+      <div class="proj-num">04</div>
+      <div class="proj-name zh-only">高频交易中的机器学习策略</div>
+      <div class="proj-name en-only">ML in High Frequency Trading</div>
+      <div class="proj-org">Course Project · Jan–Jun 2025</div>
+      <p class="proj-desc zh-only">基于 BTC 秒级数据做高频策略，数据量超过十亿行，造了两百多个特征，跑出来年化 203%。</p>
+      <p class="proj-desc en-only">Engineered 200+ leakage-free features on BTCUSDT second-level data (1B+ rows), built LightGBM strategy trainer with Optuna tuning. Achieved 203% annual return as market maker.</p>
+      <div class="proj-highlights">
+        <div class="proj-highlight zh-only">年化收益 203% · 胜率 55.1%</div>
+        <div class="proj-highlight en-only">203% annual return · 55.1% win rate</div>
+      </div>
+      <div class="proj-tech"><span>LightGBM</span><span>Optuna</span><span>Python</span><span>Parquet</span><span>SQL</span></div>
+    </div>
+
+    <div class="proj-card">
+      <div class="proj-num">05</div>
+      <div class="proj-name zh-only">Wordle 难度预测与玩家行为建模</div>
+      <div class="proj-name en-only">Wordle Difficulty Prediction &amp; Player Behavior Modeling</div>
+      <div class="proj-org">MCM Finalist (Top 2%) · Feb 2023</div>
+      <p class="proj-desc zh-only">MCM 数学建模竞赛题目。用 ARIMA 分析 Wordle 的时间序列数据预测参与人数变化，再用广义加性模型刻画猜词次数分布。</p>
+      <p class="proj-desc en-only">MCM competition problem. Applied ARIMA to forecast Wordle participant trends, built a GAM to model guess attempt distributions, and classified word difficulty using K-means + LightGBM.</p>
+      <div class="proj-highlights">
+        <div class="proj-highlight zh-only">K-means 聚类分级 + LightGBM 回归预测词难度</div>
+        <div class="proj-highlight en-only">K-means clustering + LightGBM for word difficulty rating</div>
+      </div>
+      <div class="proj-tech"><span>ARIMA</span><span>GAM</span><span>K-means</span><span>LightGBM</span><span>Python</span></div>
+    </div>
+
+    <div class="proj-card">
+      <div class="proj-num">06</div>
+      <div class="proj-name zh-only">房贷违约风险建模</div>
+      <div class="proj-name en-only">Mortgage Default Risk Modeling</div>
+      <div class="proj-org">Freddie Mac Dataset · Sep–Dec 2025</div>
+      <p class="proj-desc zh-only">拿 Freddie Mac 的数据做房贷违约预测，两千万条记录，用了逻辑回归、随机森林和 LightGBM，最后用 SHAP 看模型有没有胡说八道。</p>
+      <p class="proj-desc en-only">Processed 20M+ monthly records and 930k+ loan originations. Built LR, RF, and LightGBM models; applied SHAP analysis for economic interpretability and risk driver identification.</p>
+      <div class="proj-highlights">
+        <div class="proj-highlight zh-only">多维度评估框架，重点关注高风险贷款的识别效果</div>
+        <div class="proj-highlight en-only">Precision · Recall@Top 1% · UPB-weighted loss framework</div>
+      </div>
+      <div class="proj-tech"><span>LightGBM</span><span>Random Forest</span><span>SHAP</span><span>Python</span><span>Parallel Pipeline</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- INTERESTS -->
+<section id="interests">
+  <div class="section-header reveal">
+    <span class="section-num">04</span>
+    <h2 class="section-title zh-only">这个人还...</h2>
+    <h2 class="section-title en-only">Beyond the Terminal</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="interests-grid reveal">
+    <div class="interest-card">
+      <div class="interest-icon">📸</div>
+      <div class="interest-name zh-only">摄影</div>
+      <div class="interest-name en-only">Photography</div>
+      <div class="interest-desc zh-only">停下来等一个好光线</div>
+      <div class="interest-desc en-only">finding signal in noise</div>
+    </div>
+    <div class="interest-card">
+      <div class="interest-icon">🎾</div>
+      <div class="interest-name zh-only">网球</div>
+      <div class="interest-name en-only">Tennis</div>
+      <div class="interest-desc zh-only">打完一场再吃饭</div>
+      <div class="interest-desc en-only">hand-eye coordination drills</div>
+    </div>
+    <div class="interest-card">
+      <div class="interest-icon">🧗</div>
+      <div class="interest-name zh-only">抱石攀岩</div>
+      <div class="interest-name en-only">Bouldering</div>
+      <div class="interest-desc zh-only">爬不过去就多试几次</div>
+      <div class="interest-desc en-only">fail until you find the route</div>
+    </div>
+    <div class="interest-card">
+      <div class="interest-icon">🥾</div>
+      <div class="interest-name zh-only">徒步</div>
+      <div class="interest-name en-only">Hiking</div>
+      <div class="interest-desc zh-only">手机没信号的地方</div>
+      <div class="interest-desc en-only">mandatory digital detox</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header reveal">
+    <span class="section-num">05</span>
+    <h2 class="section-title zh-only">联系我</h2>
+    <h2 class="section-title en-only">Get In Touch</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="contact-inner reveal">
+    <div>
+      <div class="contact-text zh-only">有什么想聊的，<em>发我就行。</em></div>
+      <div class="contact-text en-only">Got an interesting idea? <em>Preferably over virtual coffee</em> — let's talk.</div>
+      <div class="contact-links">
+        <a href="mailto:yiwenz15@illinois.edu" class="contact-link">
+          <span class="contact-link-icon">EMAIL</span>
+          yiwenz15@illinois.edu
+        </a>
+        <a href="https://www.linkedin.com/in/yiwen-zhang-8458aa20a" target="_blank" class="contact-link">
+          <span class="contact-link-icon">LINKEDIN</span>
+          linkedin.com/in/yiwen-zhang
+        </a>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="form-field">
+        <label class="form-label zh-only">姓名</label>
+        <label class="form-label en-only">Name</label>
+        <input type="text" class="form-input" placeholder="Your name">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" placeholder="your@email.com">
+      </div>
+      <div class="form-field">
+        <label class="form-label zh-only">留言</label>
+        <label class="form-label en-only">Message</label>
+        <textarea class="form-input" rows="4" placeholder="..."></textarea>
+      </div>
+      <button class="form-submit zh-only">发送</button>
+      <button class="form-submit en-only">Send</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-name">Yiwen (Yina) Zhang</div>
+  <div class="footer-copy">© 2025 — Built with intention</div>
+</footer>
+
+<script>
+// Cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cursor.style.left=(mx-4)+'px';
+  cursor.style.top=(my-4)+'px';
+});
+function animRing(){
+  rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+  ring.style.left=(rx-16)+'px';
+  ring.style.top=(ry-16)+'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+document.querySelectorAll('a,button,.fun-fact,.proj-card,.interest-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.transform='scale(2)';ring.style.transform='scale(1.5)';ring.style.opacity='.8'});
+  el.addEventListener('mouseleave',()=>{cursor.style.transform='scale(1)';ring.style.transform='scale(1)';ring.style.opacity='.5'});
+});
+
+// Lang toggle
+function toggleLang(){
+  document.body.classList.toggle('lang-zh');
+  document.body.classList.toggle('lang-en');
+}
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+},{threshold:.1});
+reveals.forEach(r=>obs.observe(r));
+</script>
+</body>
+</html>
